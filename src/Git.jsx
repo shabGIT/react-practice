@@ -4,23 +4,31 @@ import axios from "axios";
 
 export const Git = () => {
   const [user, setUser] = useState("");
-  const [response, setResponse] = useState({});
   const [filt, setFilt] = useState([]);
   const [includeFork, setIncludeFork] = useState(false);
 
   const searchRepos = async () => {
     console.log(includeFork);
-    const result = await axios.get(
-      `https://api.github.com/users/${user}/repos`
-    );
-    // console.log(result);
-    setResponse(result.data);
-    setFilt(result.data);
+    try {
+      const result = await axios.get(
+        `https://api.github.com/users/${user}/repos`
+      );
+      // console.log(result);
+
+      const sortedData = result.data.sort((a, b) => {
+        console.log(a, b);
+        return b.size - a.size;
+      });
+      setFilt(sortedData);
+    } catch (e) {
+      console.log(e.message);
+      setUser(e.message);
+    }
   };
 
   useEffect(() => {
-    console.log(response);
-  }, [response]);
+    console.log(filt);
+  }, [filt]);
 
   const shouldDisplay = (isFork) => {
     if (includeFork) {
@@ -33,7 +41,11 @@ export const Git = () => {
   return (
     <div>
       <label htmlFor="">Githun Username:</label>
-      <input type="text" onChange={(e) => setUser(e.target.value)} />
+      <input
+        type="text"
+        value={user}
+        onChange={(e) => setUser(e.target.value)}
+      />
       <label htmlFor="">Includes forks:</label>
       <input
         type="checkbox"
