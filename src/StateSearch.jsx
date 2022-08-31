@@ -14,6 +14,17 @@ export const StateSearch = () => {
     console.log(result);
     setData(result.data);
     setDatacopy(result.data);
+
+    // method 2 of axios using then and catch method
+    //const res1 = {};
+    // axios
+    //   .get("http://localhost:3030/state")
+    //   .then((res) => {
+    //     setResult(res.data);
+    //   })
+    //   .catch((e) => {
+    //     console.log(e.message);
+    //   });
   };
 
   useEffect(() => {
